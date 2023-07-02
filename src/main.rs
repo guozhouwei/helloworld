@@ -59,6 +59,17 @@ fn strConvertVecAndArray(para: &str) {
     println!("");
 
     //2. [char]
+    let length = para.chars().count();
+    assert_eq!(length, 58);
+    //
+    let mut charArray:[char; 58] = ['0'; 58];
+    //
     let chars = para.chars();
-    println!("[charArray]:{:?}", chars);
+    let mut i = 0;
+    for character in chars {
+        charArray[i] = character;
+        i += 1;
+    }
+
+    println!("[charArray]:{:?}", charArray);
 }
