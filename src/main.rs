@@ -1,7 +1,9 @@
-use std::string;
+use std::{string, array};
 
 fn main() {
+
     /*
+     * 作业
      * （1）添加一个一层子模块，循环打印从’a’~’Z’ 之间的所有字符
      * （2）添加一个二层子模块，循环打印从’A’~’z’ 之间的所有字符
      * （3）使用Cargo编译运行此工程
@@ -35,6 +37,7 @@ fn test_string_convert_to_() {
     let hello5 = String::from("안녕하세요");
     let hello6 = String::from("你好");
 
+    //拼接各种形式的字符
     let mut fix = String::from("$$$$");
     fix.push_str(&s);
     fix.push_str(&hello1);
@@ -43,24 +46,27 @@ fn test_string_convert_to_() {
     fix.push_str(&hello4);
     fix.push_str(&hello5);
     fix.push_str(&hello6);
-    //主要为了各种字符组合后再转成char数组会是什么效果
-    strConvertVecAndArray(&fix);
-}
-
-fn strConvertVecAndArray(para: &str) {
-
-    //1. Vec<char>
-    let charVec: Vec<char> = para.chars().collect::<Vec<_>>();
-    println!("Vec<char>:{:?}", charVec);
-    
-
+    //
+    println!("打印拼接后的字符串：{}", &fix);
     println!("");
 
-<<<<<<< HEAD
+    //主要为了各种字符组合后再转成char数组会是什么效果
+    let (charVec, charArray) = strConvertVecAndArray(&fix);
+    println!("字符串转Vec<char>:{:?}", charVec);
+    println!("");
+    println!("字符串转[char]:{:?}", charArray);
+
+
+}
+
+/*
+ * String 转 元组(vec, [char])
+ */
+fn strConvertVecAndArray(para: &str) -> (Vec<char>, [char; 58]) {
+    //1. Vec<char>
+    let charVec: Vec<char> = para.chars().collect::<Vec<_>>();
+
     //2. [char]
-=======
-    //2. [char] 代码不够精简，很啰嗦
->>>>>>> e529ef13f97882696b4bf4ec8630d9274b33d6fd
     let length = para.chars().count();
     assert_eq!(length, 58);
     //
@@ -68,10 +74,9 @@ fn strConvertVecAndArray(para: &str) {
     //
     let chars = para.chars();
     let mut i = 0;
-    for character in chars {
-        charArray[i] = character;
-        i += 1;
-    }
-
-    println!("[charArray]:{:?}", charArray);
+    chars.for_each(|c| {
+         charArray[i] = c;
+         i += 1;
+    });
+    (charVec, charArray)
 }
