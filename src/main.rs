@@ -10,11 +10,11 @@ fn main() {
      * （3）使用Cargo编译运行此工程
      * （需要自行发现其中的细节，一个考点是：ascii码字符的顺序）
      */
-    println!("打印 Z~a:");
+    println!(">>>> 打印 Z~a:");
     let vec = asciiutil::printAsciiFroma2Z();
     println!("{:?}",vec);
     
-    println!("打印 A~z:");
+    println!(">>>> 打印 A~z:");
     let charVec = asciiutil::asciiprint::printAsciiFromA2z();
     println!("{:?}",charVec);
 }
