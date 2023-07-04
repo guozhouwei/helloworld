@@ -50,7 +50,7 @@ fn test_string_convert_to_() {
     println!("打印拼接后的字符串：{}", &fix);
     println!("");
 
-    //主要为了各种字符组合后再转成char数组会是什么效果
+    //各种字符组合,转成动态数组与char数组
     let (charVec, charArray) = strConvertVecAndArray(&fix);
     println!("字符串转Vec<char>:{:?}", charVec);
     println!("");
