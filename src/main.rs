@@ -43,10 +43,8 @@ fn test_string_convert_to_() {
     fix.push_str(&hello4);
     fix.push_str(&hello5);
     fix.push_str(&hello6);
-    //
+    //主要为了各种字符组合后再转成char数组会是什么效果
     strConvertVecAndArray(&fix);
-
-
 }
 
 fn strConvertVecAndArray(para: &str) {
@@ -58,7 +56,11 @@ fn strConvertVecAndArray(para: &str) {
 
     println!("");
 
+<<<<<<< HEAD
     //2. [char]
+=======
+    //2. [char] 代码不够精简，很啰嗦
+>>>>>>> e529ef13f97882696b4bf4ec8630d9274b33d6fd
     let length = para.chars().count();
     assert_eq!(length, 58);
     //
