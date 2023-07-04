@@ -25,7 +25,7 @@ fn main() {
 * 如何将字符串转换为字符数组?
 * String -> [char] 或 Vec<char>
 */
-fn test_string_convert_to_() {    
+fn testStringConvert() {    
     let s = String::from("initial contents");
     let hello1 = String::from("عليكم السلام");
     let hello2 = String::from("Dobrý den");
