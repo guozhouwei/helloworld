@@ -1,4 +1,5 @@
-use std::{string, array};
+mod asciiutil;
+
 
 fn main() {
 
@@ -10,15 +11,11 @@ fn main() {
      * （需要自行发现其中的细节，一个考点是：ascii码字符的顺序）
      */
     println!("打印 Z~a:");
-    for ascii1 in ('Z'..='a').rev() {
-        print!("{ascii1} ");
-    }
-    println!("");
-    println!("打印 A~z:");
+    asciiutil::printAsciiFroma2Z();
     
-    for ascii2 in 'A'..='z' {
-        print!("{ascii2}");
-    }
+    println!("打印 A~z:");
+    asciiutil::printAsciiFromA2z()
+    
 
 }
 
