@@ -11,12 +11,12 @@ fn main() {
      * （需要自行发现其中的细节，一个考点是：ascii码字符的顺序）
      */
     println!("打印 Z~a:");
-    asciiutil::printAsciiFroma2Z();
+    let vec = asciiutil::printAsciiFroma2Z();
+    println!("{:?}",vec);
     
     println!("打印 A~z:");
-    asciiutil::printAsciiFromA2z()
-    
-
+    let charVec = asciiutil::asciiprint::printAsciiFromA2z();
+    println!("{:?}",charVec);
 }
 
 #[test]

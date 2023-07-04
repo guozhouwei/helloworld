@@ -1,20 +1,16 @@
 
-mod asciiprint;
+pub mod asciiprint;
 
 /*
  * 循环打印从’a’~’Z’ 之间的所有字符
  */
-pub fn printAsciiFroma2Z() {
-    for ascii1 in ('Z'..='a').rev() {
-        print!("{ascii1}\t");
+pub fn printAsciiFroma2Z() -> Vec<char> {
+
+    let mut charVec = Vec::new();
+
+    for c in ('Z'..='a').rev() {
+        //print!("{c}\t");
+        charVec.push(c);
     }
-    println!("");
-}
-
-
-/*
- * 循环打印从’A’~’z’ 之间的所有字符
- */
-pub fn printAsciiFromA2z() {
-    asciiprint::printAsciiFromA2z();
+    charVec
 }
