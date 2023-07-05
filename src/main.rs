@@ -10,21 +10,23 @@ fn main() {
      * （3）使用Cargo编译运行此工程
      * （需要自行发现其中的细节，一个考点是：ascii码字符的顺序）
      */
-    println!("打印 Z~a:");
+    //添加一个一层子模块，循环打印从’a’~’Z’ 之间的所有字符
     let vec = asciiutil::printAsciiFroma2Z();
+    //
+    println!("打印 Z~a:");
     //println!("{:?}",vec);
     //动态数组循环打印
     for ele in vec.iter() {
-        print!("{ele}\t");
+        print!("{ele} \t");
     }
     
     println!("");
-    
-    println!("打印 A~z:");
+
+    //添加一个二层子模块，循环打印从’A’~’z’ 之间的所有字符
     let charVec = asciiutil::asciiprint::printAsciiFromA2z();
-    //println!("{:?}\t",charVec);
+    println!("打印 A~z:");
     for ele in charVec.iter() {
-        print!("{ele}\t");
+        print!("{ele} \t");
     }
 }
 
