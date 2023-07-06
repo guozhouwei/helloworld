@@ -4,13 +4,13 @@ pub mod asciiprint;
 /*
  * 循环打印从’a’~’Z’ 之间的所有字符
  */
-pub fn printAsciiFroma2Z() -> Vec<char> {
+pub fn print_ascii_froma2Z() -> Vec<char> {
 
-    let mut charVec = Vec::new();
+    let mut char_vec = Vec::new();
 
     for c in ('Z'..='a').rev() {
         //print!("{c}\t");
-        charVec.push(c);
+        char_vec.push(c);
     }
-    charVec
+    char_vec
 }
