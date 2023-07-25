@@ -43,9 +43,8 @@ fn main() {
     //
     for item in vec2 {
         // 
-        let sum = class04_homework01_2::sum_areas(item);
-        //
-        let (shape, area) = item.area();
+        let (shape, area) = class04_homework01_2::sum_areas(item);
+        //let (shape, area) = item.area();
         println!("{} area is {}", shape, area);
     }
 
