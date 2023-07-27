@@ -1,13 +1,45 @@
 
 mod class04_homework01;
+mod class03_homework;
 
 use class04_homework01::class04_homework01_1;
 use class04_homework01::class04_homework01_2;
 
+use class03_homework::class03_homework01;
+
+// macro_rules! add_as2 {
+//     ( $($a:expr), * ) => {
+//         {
+//             0 $(+$a)*
+//         }
+//     }
+// }
+
+//转map
+use std::collections::HashMap;
+
+macro_rules! convert_to_map {
+    ($($key:expr => $value:expr), *) => {
+        {
+            let mut person_map = HashMap::new();
+            $(person_map.insert($key, $value);) *
+            person_map   
+        }
+    };
+}
 
 fn main() {
    //
-   
+//    let sum = add_as2!(1,2,3,4,5,6,7,8,9);
+//     println!("sum = {}", sum);
+
+    let person = convert_to_map!{
+        "name" => "zhouzhou",
+        "gender" => "man",
+        "address" => "beijing"
+    };
+
+    println!("{:?}", person);
 }
 
 /*
@@ -68,7 +100,7 @@ fn test_case_02() {
     
     use std::ops::Add;
 
-    #[derive(Debug, Copy, Clone, PartialEq)]
+    #[derive(Debug, Copy, Clone, PartialEq, PartialOrd)]
     struct Point {
        x: i32,
        y: i32,
@@ -84,6 +116,7 @@ fn test_case_02() {
        }
     }
    
+   //todo 范型方式实现，如何用 trait object 实现呢？？？
     pub fn point_add<T: Add<Output = T>> (point1: T, point2: T) -> T{
         point1.add(point2)
     }
@@ -97,4 +130,253 @@ fn test_case_02() {
 }
 
 
+#[test]
+fn test_case_homework_01() {
+    let person = convert_to_map!{
+        "name" => "zhouzhou",
+        "gender" => "man",
+        "address" => "beijing"
+    };
+
+    println!("{:?}", person);
+
+}
+
+
+
+//--------------第五课 课堂笔记-----------------
+static BSTRING: &'static str = "abc";
+fn foo() -> &'static str {
+    //let s = String::from("abc");
+    BSTRING
+}
+
+#[test]
+fn test_case_03() {
+    //
+    let s = foo();
+}
+
+fn foo1(s: &str) -> &str {
+    if s.len() > 5 {
+        &s[..5]
+    } else {
+        s
+    }
+}
+
+#[test]
+fn test_case_04() {
+    let s = String::from("abcdef");
+    //
+    println!("{}", foo1(&s));
+}
+
+fn foo2(s: &str) -> &str {
+    s
+}
+
+#[test]
+fn test_case_05() {
+    //let result;
+    // {
+    //     let s = String::from("abcdef");
+    //     result = foo2(&s);
+    // }
+    //println!("{}", result);
+}
+
+#[derive(Debug)]
+enum UsState {
+    Alabama,
+    Alaska,
+}
+
+enum Coin {
+    Penny,
+    Nickel,
+    Dime,
+    Quarter(UsState),
+}
+
+#[test]
+fn test_case_06() {
+    let config_max = Some(3u8);
+    match config_max {
+        Some(max) => println!("The maximun is configured to be {}", max),
+        _ =>(),
+    }
+
+    let config_max = Some(3u8);
+    if let Some(max) = config_max {
+        println!("The maximun is configured to be {}", max);
+    }
+
+    let a = UsState::Alabama;
+    let coin = Coin::Quarter(a);
+
+    let mut count = 0;
+    match coin {
+        Coin::Quarter(ref state) => println!("State quarter from {:?}!", state),
+        _ => count += 1,
+    }
+
+    let mut count = 0;
+    if let Coin::Quarter(state) = coin {
+        println!("State quarter from {:?}!", state);
+    } else {
+        count += 1;
+    }
+
+
+}
+
+
+#[test]
+fn test_case_07() {
+    //let x = Some("value");
+    let x:Option<&str> = None;
+    assert_eq!(x.expect("fruits are healthy123"), "value");
+}
+
+// use std::fs::File;
+// use std::io::{self, Read};
+
+// fn read_username_from_file() -> Result<String, io::Error> {
+//     let username_file_result = File::open("/Users/zhouzhou/rust_workspace/helloworld/hello.txt");
+
+//     let mut username_file = match username_file_result {
+//         Ok(file) => file,
+//         Err(e) => return Err(e),
+//     };
+
+//     let mut username = String::new();
+
+//     match username_file.read_to_string(&mut username) {
+//         Ok(_) => Ok(username),
+//         Err(e) => Err(e),
+//     }
+    
+// }
+
+// #[test]
+// fn test_case_08() {
+//     let username = read_username_from_file();
+//     match username {
+//         Ok(v) => print!("ok = {}", v),
+//         Err(e) => println!("err = {}", e),
+//     }
+// }
+
+
+use std::convert;
+use std::fs::File;
+use std::io::{self, Read};
+use std::str::Chars;
+
+fn read_username_from_file() -> Result<String, io::Error> {
+    let mut username_file = File::open("/Users/zhouzhou/rust_workspace/helloworld/hello.txt")?;
+    let mut username = String::new();
+    username_file.read_to_string(&mut username)?;
+    let a = "100".parse::<u32>().map_err(|e| std::io::Error::new(std::io::ErrorKind::Other, "oh no"))?;
+    Ok(username)
+}
+
+#[test]
+fn test_case_09() {
+    let result = read_username_from_file();
+    match result {
+             Ok(v) => println!("ok = {}", v),
+             Err(e) => println!("err = {}", e),
+    }
+}
+
+fn last_char_of_first_line(text: &str) -> Option<char> {
+    text.lines().next()?.chars().last()
+}
+
+#[test]
+fn test_case_10() {
+    let a = "mssssp
+    bbb
+    ffff
+    7777
+    uuuuu
+    ...";
+
+    let b = last_char_of_first_line(a);
+    println!("***: {:?}", b)
+}
+
+macro_rules! add {
+    ($a: expr, $b: expr) => {
+        {
+            $a+$b
+        }
+    };
+
+    ($a: expr) => {
+        {
+            $a
+        }
+    }
+}
+
+
+#[test]
+fn test_case_11() {
+    let sum = add!(1,2);
+    println!("1 + 2 = {}", sum);
+
+    let third = add!(9);
+    println!("{}", third);
+}
+
+macro_rules! add_as {
+    ($a: expr, $b: expr, $type:ty) => {
+        {
+            $a as $type + $b as $type
+        }
+    };
+}
+
+#[test]
+fn test_case_12() {
+    let sum = add_as!(8, -9, i32);
+    println!("8+9={}", sum);
+}
+
+macro_rules! add_as1 {
+    ( $($a:expr), * ) => {
+        {
+            0 $(+$a)*
+        }
+    }
+}
+
+#[test]
+fn test_case_13() {
+    let sum = add_as1!(1,2,3,4,5,6,7,8,9);
+    println!("sum = {}", sum);
+}
+
+macro_rules! calculate {
+    (eval $e:expr) => {
+        {
+            let val = $e;
+            println!("{} = {}", stringify!{$e}, val);
+        }
+    };
+}
+
+#[test]
+fn test_case_14() {
+    calculate! {
+        eval 1 +2
+    }
+
+    calculate!{
+        eval (1 + 2) * (3 /4)
+    }
+}
 
