@@ -76,7 +76,7 @@ struct Student {
     name: String,  //姓名
     age: u8,   //年龄
     gender: Gender,   //性别
-    grade_class: GradeClass, //班级
+    gradeclass: GradeClass, //班级
     clubs: Vec<Club>, //参加的社团
     courses: Vec<Course>, //学习的课程
 }
@@ -88,19 +88,19 @@ struct Student {
 fn main() {
     println!("►►►► 第一步 创建课程 ◄◄◄◄");
     let mut course_vec = Vec::new();
-    create_course(&mut course_vec);
-    println!("►►►► 课程列表如下: ◄◄◄◄");
-    for index in 0..course_vec.len() {
-        println!("编号{}, 课程信息：{:?}", index+1, course_vec.get(index).unwrap());
-    }
+    // create_course(&mut course_vec);
+    // println!("►►►► 课程列表如下: ◄◄◄◄");
+    // for index in 0..course_vec.len() {
+    //     println!("编号{}, 课程信息：{:?}", index+1, course_vec.get(index).unwrap());
+    // }
 
     println!("►►►► 第二步 创建社团: ◄◄◄◄");
     let mut club_vec = Vec::new();
-    create_club(&mut club_vec);
-    println!("►►►► 社团列表如下: ◄◄◄◄");
-    for index in 0..club_vec.len() {
-        println!("编号{}, 社团信息：{:?}", index+1, club_vec.get(index).unwrap());
-    }
+    // create_club(&mut club_vec);
+    // println!("►►►► 社团列表如下: ◄◄◄◄");
+    // for index in 0..club_vec.len() {
+    //     println!("编号{}, 社团信息：{:?}", index+1, club_vec.get(index).unwrap());
+    // }
 
     println!("►►►► 第三步 创建班级: ◄◄◄◄");
     let mut gradeclass_vec = Vec::new();
@@ -122,7 +122,7 @@ fn main() {
 /**
  * 创建学生 
  */
-fn create_student(course_map: &Vec<Course>, club_map: &Vec<Club>, gradeClass_map: &Vec<GradeClass>) -> Student{
+fn create_student(course_vec: &Vec<Course>, club_vec: &Vec<Club>, gradeclass_vec: &Vec<GradeClass>) -> Student{
     println!("请输入学生名:");
     let mut input = String::new();        
     io::stdin().read_line(&mut input).expect("error");
@@ -135,13 +135,40 @@ fn create_student(course_map: &Vec<Course>, club_map: &Vec<Club>, gradeClass_map
     let result = Gender::from_str(&gender);
     let gender_enum = result.unwrap();
 
-
     println!("请输入年龄:");
-    let mut input1 = String::new();
-    io::stdin().read_line(&mut input1).expect("error");
-    let age: String = input1.trim().to_string();
+    let mut input2 = String::new();
+    io::stdin().read_line(&mut input2).expect("error");
+    let age_str: String = input2.trim().to_string();
+    let age = age_str.parse::<u8>().unwrap();
 
-    println!("请选择班级:");
+    println!("请选择下列班级（请输入编号）:");
+    for index in 0..gradeclass_vec.len() {
+        println!("    ->>>> 编号{}, 班级名称：{:?}", index+1, gradeclass_vec.get(index).unwrap());
+    }
+    println!("请输入班级编号:");
+    let mut input3 = String::new();
+    io::stdin().read_line(&mut input3).expect("error");
+    let index_str: String = input3.trim().to_string();
+    let gradeclass_num = index_str.parse::<usize>().unwrap() - 1;
+    let gradeclass = gradeclass_vec[gradeclass_num];
+
+    println!("请选择下列班级（请输入编号）:");
+    for index in 0..gradeclass_vec.len() {
+        println!("    ->>>> 编号{}, 班级名称：{:?}", index+1, gradeclass_vec.get(index).unwrap());
+    }
+    println!("请输入社团编号（如若参与多个社团，请逗号分隔）:");
+    let mut input4 = String::new();
+    io::stdin().read_line(&mut input4).expect("error");
+    let index_str_list: String = input4.trim().to_string();
+    //
+    let clubs = Vec::new();
+    for split_string in index_str_list.split(", ") {
+        println!("{}", split_string);
+    }
+    let gradeclass_num = index_str.parse::<usize>().unwrap() - 1;
+    let gradeclass = gradeclass_vec[gradeclass_num];
+
+
 
     let mut input2 = String::new();
     io::stdin().read_line(&mut input2).expect("error");
@@ -149,7 +176,9 @@ fn create_student(course_map: &Vec<Course>, club_map: &Vec<Club>, gradeClass_map
     //
     let student = Student {
                                         name,
-                                        gender_enum,
+                                        age,
+                                        gender:gender_enum,
+                                        gradeclass,
                                         faculty,
                                         speciality,
                                     };
