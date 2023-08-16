@@ -1,382 +1,276 @@
-
-mod class04_homework01;
-mod class03_homework;
-
-use class04_homework01::class04_homework01_1;
-use class04_homework01::class04_homework01_2;
-
-use class03_homework::class03_homework01;
-
-// macro_rules! add_as2 {
-//     ( $($a:expr), * ) => {
-//         {
-//             0 $(+$a)*
-//         }
-//     }
-// }
-
-//转map
+use std::f32::consts::E;
+use std::fmt::Display;
+use std::io::{self, stdout};
 use std::collections::HashMap;
+use std::{string, result};
 
-macro_rules! convert_to_map {
-    ($($key:expr => $value:expr), *) => {
-        {
-            let mut person_map = HashMap::new();
-            $(person_map.insert($key, $value);) *
-            person_map   
-        }
-    };
-}
-
-fn main() {
-   //
-//    let sum = add_as2!(1,2,3,4,5,6,7,8,9);
-//     println!("sum = {}", sum);
-
-    let person = convert_to_map!{
-        "name" => "zhouzhou",
-        "gender" => "man",
-        "address" => "beijing"
-    };
-
-    println!("{:?}", person);
+/*
+ * 课程
+ */
+#[derive(Debug, Clone)]
+struct Course {
+    name: String,
+    compulsory: bool,  //true 必修课，false 选修课
+    teacher_name: String,  //授课老师
 }
 
 /*
- * 第四节课作业 第一题
- * 使用枚举包裹三个不同的类型，并放入一个Vec中，对Vec进行遍历，调用三种不同类型的各自的方法。
- * 定义三个不同的类型，使用Trait Object，将其放入一个Vec中，对Vec进行遍历，调用三种不同类型的各自的方法。
+ * 社团
  */
- #[test]
- fn test_case_01() {
+#[derive(Debug, Clone)]
+struct Club {
+    name: String,   //社团名称
+    content: String,  //社团职责内容
+}
 
-    //第一种方式：使用枚举包裹三个不同的类型，并放入一个Vec中，对Vec进行遍历，调用三种不同类型的各自的方法。
-    let mut vec1 : Vec<class04_homework01_1::ShapeEnum> = vec![
-            class04_homework01_1::ShapeEnum::Rectangle(class04_homework01_1::Rectangle {width:5.5, height:4.4}),
-            class04_homework01_1::ShapeEnum::Circle(class04_homework01_1::Circle {radius:5.5}),
-            class04_homework01_1::ShapeEnum::RightAngleTriangle(class04_homework01_1::RightAngleTriangle{base:5.5, height:4.4}),
-        ];
-    for shape_enum in vec1 {
-        match shape_enum {
-            class04_homework01_1::ShapeEnum::Rectangle(r) => println!("Rectangle area is {}", r.area()),
-            class04_homework01_1::ShapeEnum::Circle(c) => println!("Circle area is {}", c.area()),
-            class04_homework01_1::ShapeEnum::RightAngleTriangle(rat) => println!("RightAngleTriangle area is {}", rat.area()),
-        }
-    }
-
-    println!("----------------");
-
-    //第二种方式：定义三个不同的类型，使用Trait Object，将其放入一个Vec中，对Vec进行遍历，调用三种不同类型的各自的方法。
-    let rectangle = class04_homework01_2::Rectangle{width:5.5, height:4.4};
-    let circle = class04_homework01_2::Circle{radius:5.5};
-    let rightAngleTriangle = class04_homework01_2::RightAngleTriangle{base:5.5, height:4.4};
-    //
-    let vec2:Vec<&dyn class04_homework01_2::Shape> = vec![&rectangle, &circle, &rightAngleTriangle];
-    //
-    for item in vec2 {
-        // 
-        let (shape, area) = class04_homework01_2::sum_areas(item);
-        //let (shape, area) = item.area();
-        println!("{} area is {}", shape, area);
-    }
-
- }
-
- /*
- * 第四节课作业 第二题
- * 搜索相关文档，为你自己定义的一个类型或多个类型实现加法运算（用符号 +），并构思使用Trait Object实现类型方法的调用
- * 
- * 学习资料：
- * https://rustwiki.org/zh-CN/core/ops/trait.Add.html
- * 
- * 
- * pub trait Add<Rhs = Self> {
- *   type Output;
- *   fn add(self, rhs: Rhs) -> Self::Output;
- *  }
+/*
+ * 班级
  */
-#[test]
-fn test_case_02() {
-    
-    use std::ops::Add;
-
-    #[derive(Debug, Copy, Clone, PartialEq, PartialOrd)]
-    struct Point {
-       x: i32,
-       y: i32,
-    }
-   
-    impl Add for Point {
-       type Output = Self;
-       fn add(self, other:Self) -> Self {
-           Self {
-               x:self.x + other.x,
-               y:self.y + other.y,
-           }
-       }
-    }
-   
-   //todo 范型方式实现，如何用 trait object 实现呢？？？
-    pub fn point_add<T: Add<Output = T>> (point1: T, point2: T) -> T{
-        point1.add(point2)
-    }
-
-   let a = Point { x: 1, y: 0 } ;
-   let b = Point { x: 2, y: 3 } ;
-
-   let c = point_add(a, b);
-   println!("Point(x:{},y:{}) + Point(x:{}, y:{}) = Point(x:{}, y:{})", a.x, a.y, b.x, b.y, c.x, c.y);
-   
+#[derive(Debug, Clone)]
+struct GradeClass {
+    name:String, //班级名称
+    grade: String,  //年级
+    faculty: String,   //院系
+    speciality: String,   //专业
 }
 
+/*
+ * 性别
+ */
+#[derive(Debug, PartialEq, Clone)]
+enum Gender {
+    Male,   // 男
+    Female, // 女
+}
 
-#[test]
-fn test_case_homework_01() {
-    let person = convert_to_map!{
-        "name" => "zhouzhou",
-        "gender" => "man",
-        "address" => "beijing"
-    };
+use std::str::FromStr;
 
-    println!("{:?}", person);
+impl FromStr for Gender {
+    type Err = String;
+
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        let unit = match s {
+            "man" => Gender::Male,
+            "female" => Gender::Female,
+            _ => return Err(s.to_string()),
+        };
+        Ok(unit)
+    }
+}
+
+impl ToString for Gender {
+    fn to_string(&self) -> String {
+        let ret = match self {
+            Gender::Male => "man",
+            Gender::Female => "female",
+        };
+        ret.to_string()
+    }
+}
+
+/*
+ * 学生
+ */
+#[derive(Debug, Clone)]
+struct Student {
+    name: String,  //姓名
+    age: u8,   //年龄
+    gender: Gender,   //性别
+    grade_class: GradeClass, //班级
+    clubs: Vec<Club>, //参加的社团
+    courses: Vec<Course>, //学习的课程
+}
+
+/**
+ * 第三课作业：
+ * 请基于Rust的基本数据结构写一个简单的学生管理系统（比如，学生，社团，班级、课程等），明确类型之间的关系，进行基本的CRUD操作
+ */
+fn main() {
+    println!("►►►► 第一步 创建课程 ◄◄◄◄");
+    let mut course_vec = Vec::new();
+    create_course(&mut course_vec);
+    println!("►►►► 课程列表如下: ◄◄◄◄");
+    for index in 0..course_vec.len() {
+        println!("编号{}, 课程信息：{:?}", index+1, course_vec.get(index).unwrap());
+    }
+
+    println!("►►►► 第二步 创建社团: ◄◄◄◄");
+    let mut club_vec = Vec::new();
+    create_club(&mut club_vec);
+    println!("►►►► 社团列表如下: ◄◄◄◄");
+    for index in 0..club_vec.len() {
+        println!("编号{}, 社团信息：{:?}", index+1, club_vec.get(index).unwrap());
+    }
+
+    println!("►►►► 第三步 创建班级: ◄◄◄◄");
+    let mut gradeclass_vec = Vec::new();
+    create_gradeclass(&mut gradeclass_vec);
+    println!("►►►► 班级列表如下: ◄◄◄◄");
+    for index in 0..gradeclass_vec.len() {
+        println!("编号{}, 班级信息：{:?}", index+1, gradeclass_vec.get(index).unwrap());
+    }
+
+    println!("►►►► 第四步 添加学生（以1个学生为例）: ◄◄◄◄");
+    let mut student = create_student(&course_vec, &club_vec, gradeclass_vec);
+    println!("►►►► 学生信息如下: ◄◄◄◄");
+    println!("{:?}", student);
+
+    println!("►►►► 第五步 修改学生信息 ◄◄◄◄");
 
 }
 
-
-
-//--------------第五课 课堂笔记-----------------
-static BSTRING: &'static str = "abc";
-fn foo() -> &'static str {
-    //let s = String::from("abc");
-    BSTRING
-}
-
-#[test]
-fn test_case_03() {
+/**
+ * 创建学生 
+ */
+fn create_student(course_map: &Vec<Course>, club_map: &Vec<Club>, gradeClass_map: &Vec<GradeClass>) -> Student{
+    println!("请输入学生名:");
+    let mut input = String::new();        
+    io::stdin().read_line(&mut input).expect("error");
+    let name: String = input.trim().to_string();
     //
-    let s = foo();
-}
+    println!("请输入性别(man or female):");
+    let mut input1 = String::new();
+    io::stdin().read_line(&mut input1).expect("error");
+    let gender: String = input1.trim().to_string();
+    let result = Gender::from_str(&gender);
+    let gender_enum = result.unwrap();
 
-fn foo1(s: &str) -> &str {
-    if s.len() > 5 {
-        &s[..5]
-    } else {
-        s
-    }
-}
 
-#[test]
-fn test_case_04() {
-    let s = String::from("abcdef");
+    println!("请输入年龄:");
+    let mut input1 = String::new();
+    io::stdin().read_line(&mut input1).expect("error");
+    let age: String = input1.trim().to_string();
+
+    println!("请选择班级:");
+
+    let mut input2 = String::new();
+    io::stdin().read_line(&mut input2).expect("error");
+    let speciality: String = input2.trim().to_string();
     //
-    println!("{}", foo1(&s));
+    let student = Student {
+                                        name,
+                                        gender_enum,
+                                        faculty,
+                                        speciality,
+                                    };
+    student
 }
 
-fn foo2(s: &str) -> &str {
-    s
-}
+/**
+ * 创建班级 如：2023届计算机科学班、2020届艺术美声班 等
+ */
+fn create_gradeclass(gradeclass_vec: &mut Vec<GradeClass>){
+    loop {
+        println!("请输入第几届:");
+        let mut input = String::new();        
+        io::stdin().read_line(&mut input).expect("error");
+        let grade: String = input.trim().to_string();
+        //
+        println!("请输入院系:");
+        let mut input1 = String::new();
+        io::stdin().read_line(&mut input1).expect("error");
+        let faculty: String = input1.trim().to_string();
 
-#[test]
-fn test_case_05() {
-    //let result;
-    // {
-    //     let s = String::from("abcdef");
-    //     result = foo2(&s);
-    // }
-    //println!("{}", result);
-}
-
-#[derive(Debug)]
-enum UsState {
-    Alabama,
-    Alaska,
-}
-
-enum Coin {
-    Penny,
-    Nickel,
-    Dime,
-    Quarter(UsState),
-}
-
-#[test]
-fn test_case_06() {
-    let config_max = Some(3u8);
-    match config_max {
-        Some(max) => println!("The maximun is configured to be {}", max),
-        _ =>(),
-    }
-
-    let config_max = Some(3u8);
-    if let Some(max) = config_max {
-        println!("The maximun is configured to be {}", max);
-    }
-
-    let a = UsState::Alabama;
-    let coin = Coin::Quarter(a);
-
-    let mut count = 0;
-    match coin {
-        Coin::Quarter(ref state) => println!("State quarter from {:?}!", state),
-        _ => count += 1,
-    }
-
-    let mut count = 0;
-    if let Coin::Quarter(state) = coin {
-        println!("State quarter from {:?}!", state);
-    } else {
-        count += 1;
-    }
-
-
-}
-
-
-#[test]
-fn test_case_07() {
-    //let x = Some("value");
-    let x:Option<&str> = None;
-    assert_eq!(x.expect("fruits are healthy123"), "value");
-}
-
-// use std::fs::File;
-// use std::io::{self, Read};
-
-// fn read_username_from_file() -> Result<String, io::Error> {
-//     let username_file_result = File::open("/Users/zhouzhou/rust_workspace/helloworld/hello.txt");
-
-//     let mut username_file = match username_file_result {
-//         Ok(file) => file,
-//         Err(e) => return Err(e),
-//     };
-
-//     let mut username = String::new();
-
-//     match username_file.read_to_string(&mut username) {
-//         Ok(_) => Ok(username),
-//         Err(e) => Err(e),
-//     }
-    
-// }
-
-// #[test]
-// fn test_case_08() {
-//     let username = read_username_from_file();
-//     match username {
-//         Ok(v) => print!("ok = {}", v),
-//         Err(e) => println!("err = {}", e),
-//     }
-// }
-
-
-use std::convert;
-use std::fs::File;
-use std::io::{self, Read};
-use std::str::Chars;
-
-fn read_username_from_file() -> Result<String, io::Error> {
-    let mut username_file = File::open("/Users/zhouzhou/rust_workspace/helloworld/hello.txt")?;
-    let mut username = String::new();
-    username_file.read_to_string(&mut username)?;
-    let a = "100".parse::<u32>().map_err(|e| std::io::Error::new(std::io::ErrorKind::Other, "oh no"))?;
-    Ok(username)
-}
-
-#[test]
-fn test_case_09() {
-    let result = read_username_from_file();
-    match result {
-             Ok(v) => println!("ok = {}", v),
-             Err(e) => println!("err = {}", e),
-    }
-}
-
-fn last_char_of_first_line(text: &str) -> Option<char> {
-    text.lines().next()?.chars().last()
-}
-
-#[test]
-fn test_case_10() {
-    let a = "mssssp
-    bbb
-    ffff
-    7777
-    uuuuu
-    ...";
-
-    let b = last_char_of_first_line(a);
-    println!("***: {:?}", b)
-}
-
-macro_rules! add {
-    ($a: expr, $b: expr) => {
-        {
-            $a+$b
-        }
-    };
-
-    ($a: expr) => {
-        {
-            $a
-        }
-    }
-}
-
-
-#[test]
-fn test_case_11() {
-    let sum = add!(1,2);
-    println!("1 + 2 = {}", sum);
-
-    let third = add!(9);
-    println!("{}", third);
-}
-
-macro_rules! add_as {
-    ($a: expr, $b: expr, $type:ty) => {
-        {
-            $a as $type + $b as $type
-        }
+        println!("请输入专业:");
+        let mut input2 = String::new();
+        io::stdin().read_line(&mut input2).expect("error");
+        let speciality: String = input2.trim().to_string();
+        //
+        let name = format!("{}届{}班", grade, speciality);
+        //
+        let gradeClass = GradeClass {
+                                            name,
+                                            grade,
+                                            faculty,
+                                            speciality,
+                                        };
+        gradeclass_vec.push(gradeClass);
+        //
+        println!("是否继续创建班级（yes/no）:");
+        let mut input3 = String::new();
+        io::stdin().read_line(&mut input3).expect("error");
+        let continue_create = input3.trim();
+        if continue_create != "yes" {
+            println!("班级创建完毕！");
+            break;
+        } 
+        println!("继续创建班级。。。");
+        
     };
 }
 
-#[test]
-fn test_case_12() {
-    let sum = add_as!(8, -9, i32);
-    println!("8+9={}", sum);
-}
 
-macro_rules! add_as1 {
-    ( $($a:expr), * ) => {
-        {
-            0 $(+$a)*
-        }
-    }
-}
-
-#[test]
-fn test_case_13() {
-    let sum = add_as1!(1,2,3,4,5,6,7,8,9);
-    println!("sum = {}", sum);
-}
-
-macro_rules! calculate {
-    (eval $e:expr) => {
-        {
-            let val = $e;
-            println!("{} = {}", stringify!{$e}, val);
-        }
+/**
+ * 创建社团 如：舞蹈社团、吉他社团、摄影社团 等
+ */
+fn create_club(club_vec: &mut Vec<Club>){
+    loop {
+        println!("请输入社团名称:");
+        let mut input = String::new();        
+        io::stdin().read_line(&mut input).expect("error");
+        let name: String = input.trim().to_string();
+        //
+        println!("请输入社团职能:");
+        let mut input2 = String::new();
+        io::stdin().read_line(&mut input2).expect("error");
+        //
+        let club = Club {
+                                name,
+                                content: input2.trim().to_string(),
+                            };
+        club_vec.push(club);
+        //
+        println!("是否继续创建社团（yes/no）:");
+        let mut input3 = String::new();
+        io::stdin().read_line(&mut input3).expect("error");
+        let continue_create = input3.trim();
+        if continue_create != "yes" {
+            println!("社团创建完毕！");
+            break;
+        } 
+        println!("继续创建社团。。。");
+        
     };
 }
 
-#[test]
-fn test_case_14() {
-    calculate! {
-        eval 1 +2
-    }
-
-    calculate!{
-        eval (1 + 2) * (3 /4)
-    }
+/**
+ * 创建课程 如：英语，计算机，高等数学 等
+ */
+fn create_course(course_vec: &mut Vec<Course>){
+    loop {
+        println!("请输入课程名:");
+        let mut input = String::new(); //课程名        
+        io::stdin().read_line(&mut input).expect("error");
+        let name: String = input.trim().to_string();
+        //
+        println!("是否是必修课（yes/no）:");
+        let mut input1 = String::new(); //是否必修课
+        io::stdin().read_line(&mut input1).expect("error");
+        let mut compulsory = false;
+        if "yes" == input1.trim() {
+            compulsory = true;
+        }
+        //
+        println!("请输入授课教师:");
+        let mut input2 = String::new(); //是否必修课
+        io::stdin().read_line(&mut input2).expect("error");
+        //
+        let course = Course {
+                                        name,
+                                        compulsory,
+                                        teacher_name: input2.trim().to_string(),
+                                    };
+        course_vec.push(course);
+        //
+        println!("是否继续创建课程（yes/no）:");
+        let mut input3 = String::new();
+        io::stdin().read_line(&mut input3).expect("error");
+        let continue_create = input3.trim();
+        if "yes" == continue_create {
+            println!("继续创建课程。。。");
+        } else {
+            println!("课程创建完毕！");
+            break
+        }
+    };
 }
-
