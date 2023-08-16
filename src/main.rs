@@ -81,6 +81,25 @@ struct Student {
     courses: Vec<Course>, //学习的课程
 }
 
+impl Student {
+    //更改学生名
+    fn change_name(&mut self, new_name:String) { 
+       self.name = new_name;
+    }
+
+    //更改学生性别
+    fn change_gender(&mut self, new_gender:String) { 
+        let result = Gender::from_str(&new_gender);
+        let gender_enum = result.unwrap();
+        self.gender = gender_enum;
+     }
+
+     //删除某一个社团
+     fn drop_club_by_number(&mut self, remove_club_number:usize) { 
+        let club = self.clubs.get(remove_club_number-1).unwrap();
+        self.clubs.remove(remove_club_number);
+     }
+}
 /**
  * 第三课作业：
  * 请基于Rust的基本数据结构写一个简单的学生管理系统（比如，学生，社团，班级、课程等），明确类型之间的关系，进行基本的CRUD操作
@@ -116,6 +135,17 @@ fn main() {
     println!("{:?}", student);
 
     println!("►►►► 第五步 修改学生信息 ◄◄◄◄");
+    println!("►►►► 修改学生名称 ◄◄◄◄");
+    student.change_name("哇咔咔".to_string());
+
+    println!("►►►► 修改学生性别 ◄◄◄◄");
+    student.change_gender("female".to_string());
+
+    println!("►►►► 删除课程1 ◄◄◄◄");
+    student.drop_club_by_number(1);
+
+    println!("►►►► 修改后的学生信息如下: ◄◄◄◄");
+    println!("{:?}", student);
 
 }
 
