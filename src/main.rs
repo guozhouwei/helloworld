@@ -162,7 +162,7 @@ fn create_student(course_vec: &Vec<Course>, club_vec: &Vec<Club>, gradeclass_vec
     let index_str_list: String = input4.trim().to_string();
     //
     let mut clubs = Vec::new();
-    for split_string in index_str_list.split(", ") {
+    for split_string in index_str_list.split(",") {
         let club_num = split_string.parse::<usize>().unwrap() - 1;
         let club = club_vec[club_num].clone();
         clubs.push(club);
@@ -178,12 +178,11 @@ fn create_student(course_vec: &Vec<Course>, club_vec: &Vec<Club>, gradeclass_vec
     let index_str_list: String = input5.trim().to_string();
     //
     let mut courses = Vec::new();
-    for split_string in index_str_list.split(", ") {
+    for split_string in index_str_list.split(",") {
         let course_num = split_string.parse::<usize>().unwrap() - 1;
         let course = course_vec[course_num].clone();
         courses.push(course);
     }
-
     //
     let student = Student {
                                         name,
