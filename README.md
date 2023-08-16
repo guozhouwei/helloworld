@@ -3,7 +3,11 @@
 
 代码位置：https://github.com/guozhouwei/helloworld/blob/master/src/main.rs
 
-执行效果：（采用与命令行交互的方式）
+## 执行效果：（采用与命令行交互的方式）
+### 如图
+![avatar](https://github.com/guozhouwei/near_crowdfunding/blob/master/images/%E5%86%B3%E7%AD%96%E6%B5%81%E7%A8%8B%E5%9B%BE.png)
+
+### 命令行日志：
 ```shell
 ►►►► 第一步 创建课程 ◄◄◄◄
 请输入课程名:
